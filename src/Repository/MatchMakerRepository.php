@@ -14,4 +14,19 @@ class MatchMakerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, MatchMaker::class);
     }
+
+    public function getMyMatches($user){
+
+        // We search for the user in the PlayerA column
+        $qb = $this->createQueryBuilder('m')
+            ->where("m.playerA = :user")
+            ->orWhere("m.playerB = :user")
+            ->setParameter('user', $user)
+        ;
+        $query = $qb->getQuery();
+        $myMatches = $query->execute();
+
+        return $myMatches;
+    }
+
 }

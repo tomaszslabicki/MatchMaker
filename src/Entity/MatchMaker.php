@@ -6,6 +6,7 @@ use App\Model\PlayerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MatchMakerRepository;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * @ORM\Entity(repositoryClass=MatchMakerRepository::class)
@@ -27,10 +28,11 @@ class MatchMaker
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $status;
+    private $status = self::STATUS_PENDING;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @ApiProperty(iri="https://schema.org/startDate")
      */
     private $encounterDate;
 
@@ -63,7 +65,7 @@ class MatchMaker
     public function getWinner(): ?Player
     {
         if (null === ($this->scorePlayerA ?? $this->scorePlayerB ?? null)) {
-            throw new \Exception('Missing result to get a winner');
+            return null;
         }
 
         $potentialWinners = [
@@ -114,4 +116,70 @@ class MatchMaker
 
         return $this;
     }
+
+    /**
+     * @return PlayerInterface|null
+     */
+    public function getPlayerA(): ?PlayerInterface
+    {
+        return $this->playerA;
+    }
+
+    /**
+     * @param PlayerInterface|null $playerA
+     */
+    public function setPlayerA(?PlayerInterface $playerA): void
+    {
+        $this->playerA = $playerA;
+    }
+
+    /**
+     * @return PlayerInterface|null
+     */
+    public function getPlayerB(): ?PlayerInterface
+    {
+        return $this->playerB;
+    }
+
+    /**
+     * @param PlayerInterface|null $playerB
+     */
+    public function setPlayerB(?PlayerInterface $playerB): void
+    {
+        $this->playerB = $playerB;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getScorePlayerA(): ?float
+    {
+        return $this->scorePlayerA;
+    }
+
+    /**
+     * @param float|null $scorePlayerA
+     */
+    public function setScorePlayerA(?float $scorePlayerA): void
+    {
+        $this->scorePlayerA = $scorePlayerA;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getScorePlayerB(): ?float
+    {
+        return $this->scorePlayerB;
+    }
+
+    /**
+     * @param float|null $scorePlayerB
+     */
+    public function setScorePlayerB(?float $scorePlayerB): void
+    {
+        $this->scorePlayerB = $scorePlayerB;
+    }
+
+
 }

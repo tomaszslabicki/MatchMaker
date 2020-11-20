@@ -8,10 +8,30 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
+
 <div class="example-wrapper">
-    <h1>MATCH ({{ match.status }})</h1>
-    <h2>Players :</h2>
-    <b>{{ match.player1 }}</b><br/>
-    <b>{{ match.player2 }}</b>
+    <h1>10 meilleurs joueurs : </h1>
+    <ol>
+        {% for player in top10Players %}
+            <li>{{ player.username }} {{ player.ratio }}</li>
+        {% endfor %}
+    </ol></br></br>
+
+    Votre nom d'utilisateur : {{ me.username }} </br>
+    Votre ratio : {{ me.ratio }} </br></br>
+    Mes matches :
+    {% for match in matches %}
+        <!-- Verifies if the current user is the user A or B -->
+        {% if me.username == match.playerA.username %}
+            <li>Contre <b>{{ match.playerB.username }}</b> :: {{ match.status }} :: <button><a href="match/maker/{{ match.id }}">Ici pour voir le match</a></button></li>
+        {% else %}
+            <li>Contre <b>{{ match.playerA.username }}</b> :: {{ match.status }} :: <button><a href="match/maker/{{ match.id }}">Ici pour voir le match</a></button></li>
+        {% endif %}
+    {% endfor %}
+
+
+
+
+
 </div>
 {% endblock %}

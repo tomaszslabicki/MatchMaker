@@ -4,14 +4,16 @@ namespace App\Entity;
 
 use App\Model\PlayerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity
  * @ApiResource
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
-class Player implements UserInterface
+class Player implements UserInterface, PlayerInterface
 {
     /**
      * @ORM\Id
@@ -54,6 +56,12 @@ class Player implements UserInterface
     public function getRatio(): float
     {
         return $this->ratio;
+    }
+
+    public function setRatio(string $ratio): self
+    {
+        $this->ratio = $ratio;
+        return $this;
     }
 
     public function getId(): ?int
